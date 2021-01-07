@@ -3,41 +3,86 @@
 // -------------------------
 import './App.css';
 import React, {useState} from 'react'
-import DisplayOpenClose from './DisplayOpenClose'
-
-attributes: {
-  let ticker = 'AAPL'
-}
+// import DisplayOpenClose from './DisplayOpenClose'
 
 function App() {
 
-  const url = 'https://api.polygon.io/v2/aggs/ticker/AAPL/range/1/day/2020-06-01/2020-06-17?apiKey=sqfI8sNznOJ1HZHHps3UaMcoeguYwkZ2'
+  const apiKey='sqfI8sNznOJ1HZHHps3UaMcoeguYwkZ2'
+  let [symbol, setSymbol] = useState(null);
+  let [open, setOpen] = useState(null);
+  let [close, setClose] = useState(null);
+  let [dailyOpenClose, setDailyOpenClose] = useState(null)
 
+
+  // 
+  // @params: closingDate, symbol, apiKey
+  // @returns: endpoint (API url) as string 
+  function buildEndpoint(symbol, closingDate, apiKey) {
+    return  `https://api.polygon.io/v1/open-close/${symbol}/2021-01-05?apiKey=${apiKey}`
+    //return endPoint
+    //https://api.polygon.io/v1/open-close/AAPL/2020-10-14?apiKey=sqfI8sNznOJ1HZHHps3UaMcoeguYwkZ2
+  }
+
+  // look for yesterday's open/close
+  const closingDate = new Date();
+  // it gives yesterday date
+  closingDate.setDate(closingDate.getDate()-1);
+
+  function handleChange(e) {
+    setSymbol( (e.target.value).toUpperCase() )
+    console.log("Handled change..." + {symbol})
+  }
+
+  // handle submission
   function handleClick(e) {
     e.preventDefault();
 
-    fetch(url)
+
+    let endPoint = buildEndpoint(symbol, closingDate, apiKey)
+    // fetch stock data based on user given stock symbol
+    fetch(endPoint) 
     .then(response => response.json())
     .then(data => { 
-     console.log(data['results'][0]['o'])
 
-    //  ReactDOM.render(
-    //   <><li>Daily open was {open}</li> 
-    //   <li>Daily close was {close}</li></>)
+      // testing
+      console.log(data)
+      console.log(endPoint)
+      setOpen(data.open)
+      setClose(data.close)
+      console.log("open: " + data.open)
+      console.log("close: " + data.close)
 
-
-
-    }) // end fetch
+      dailyOpenClose = setDailyOpenClose(`
+      <p 
+        id="response">
+          ${symbol} stock opened at ${open} and closed at ${close} on . DATE
+      </p>`
+      )
+    }) // end fetch and parsing
   }
-  const [ticker, setTicker] = useState('AAPL')
-ß
+
+  // build user input
   let UI = (
     <>
-      <input placeholder={ticker} onChange={() => setTicker("JUICE")} name="ticker"></input>
-      <button onClick={handleClick}>Search Open/Close</button>
-      <DisplayOpenClose ticker={ticker}></DisplayOpenClose>
+      <input 
+        placeholder={symbol} 
+        onBlur={handleChange}>
+        </input>
+      <button 
+        onClick={handleClick}>
+          Search Open/Close
+      </button>
+      
+      {/*  create element with response */}
+      React.createElement()
+      <p 
+        id="response">
+          {symbol} stock opened at {open} and closed at {close} on .
+      </p>
+      {/* {dailyOpenClose} */}
     </>
   )
+
   return UI
 }
 export default App;

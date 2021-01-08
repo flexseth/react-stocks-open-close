@@ -8,15 +8,17 @@ function App() {
   let [symbol, setSymbol] = useState("Stock Symbol")
   
   // @params: systemDate, current Date object
-  // @returns: dateFragment, string (formatted numerical representation of date)
+  // @returns: dateFragment, string representation of date YYYY-MM-DD
   function formatDate(systemDate) {
-    // Current format:      // Desired format:
-    // 2021-1-7            //  2021-01-07           
     let year = systemDate.getFullYear()
     let month = systemDate.getMonth() + 1
-    if ( month < 10 ) { month = '0' + month } // add a 0
     let day = systemDate.getDate() - 1
+    // Current format: 2021-1-7      
+    
+    if ( month < 10 ) { month = '0' + month } // add a 0
     if ( day < 10 ) { day = '0' + day } // add a 0
+    // corrected format: 2021-01-07           
+     
     let dateFragment = year + '-' + month + '-' + day // YYYY-MM-DD
     
     return dateFragment

@@ -1,5 +1,5 @@
 # Polygon.io API docs
-// https://polygon.io/docs/get_v1_open-close__stocksTicker___date__anchor
+https://polygon.io/docs/get_v1_open-close__stocksTicker___date__anchor
 
 # Getting Started with Create React App
 

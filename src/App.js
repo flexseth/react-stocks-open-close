@@ -1,32 +1,38 @@
-// API docs
-// https://polygon.io/docs/get_v1_open-close__stocksTicker___date__anchor
-// -------------------------
 import './App.css';
 import React, {useState} from 'react'
-// import DisplayOpenClose from './DisplayOpenClose'
+
+import ReactDOM from 'react-dom';
+
 
 function App() {
 
   const apiKey='sqfI8sNznOJ1HZHHps3UaMcoeguYwkZ2'
-  let [symbol, setSymbol] = useState(null);
+  let [symbol, setSymbol] = useState("Stock Symbol");
   let [open, setOpen] = useState(null);
   let [close, setClose] = useState(null);
-  let [dailyOpenClose, setDailyOpenClose] = useState(null)
-
 
   // 
   // @params: closingDate, symbol, apiKey
   // @returns: endpoint (API url) as string 
   function buildEndpoint(symbol, closingDate, apiKey) {
     return  `https://api.polygon.io/v1/open-close/${symbol}/2021-01-05?apiKey=${apiKey}`
-    //return endPoint
+    // returns endPoint
     //https://api.polygon.io/v1/open-close/AAPL/2020-10-14?apiKey=sqfI8sNznOJ1HZHHps3UaMcoeguYwkZ2
   }
 
-  // look for yesterday's open/close
+  // get yesterday's date
   const closingDate = new Date();
   // it gives yesterday date
   closingDate.setDate(closingDate.getDate()-1);
+
+  function DailyOpenClose() {
+    let dailyOpenClose = (
+      <p id="response">
+        ${symbol} stock opened at ${open} and closed at ${close} on . DATE
+      </p>
+    )
+    return dailyOpenClose
+  }
 
   function handleChange(e) {
     setSymbol( (e.target.value).toUpperCase() )
@@ -37,28 +43,31 @@ function App() {
   function handleClick(e) {
     e.preventDefault();
 
-
     let endPoint = buildEndpoint(symbol, closingDate, apiKey)
     // fetch stock data based on user given stock symbol
-    fetch(endPoint) 
+    return fetch(endPoint) 
     .then(response => response.json())
     .then(data => { 
 
       // testing
-      console.log(data)
-      console.log(endPoint)
-      setOpen(data.open)
-      setClose(data.close)
-      console.log("open: " + data.open)
-      console.log("close: " + data.close)
-
-      dailyOpenClose = setDailyOpenClose(`
-      <p 
-        id="response">
-          ${symbol} stock opened at ${open} and closed at ${close} on . DATE
-      </p>`
+      // console.log("data: "+ data)
+      // console.log("endPoint: " + endPoint)
+ 
+      let returnElement = (
+        <>
+          <p>Daily Open: {data.open}</p>
+          <p>Daily Close: {data.close}</p>
+        </>
       )
+
+      ReactDOM.render(
+        returnElement,
+        document.getElementById('daily-open-close')
+      );
+      
+      
     }) // end fetch and parsing
+
   }
 
   // build user input
@@ -73,16 +82,10 @@ function App() {
           Search Open/Close
       </button>
       
-      {/*  create element with response */}
-      React.createElement()
-      <p 
-        id="response">
-          {symbol} stock opened at {open} and closed at {close} on .
-      </p>
-      {/* {dailyOpenClose} */}
-    </>
+    </> // end UI
   )
-
+  
   return UI
 }
+
 export default App;

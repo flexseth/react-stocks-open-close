@@ -8,7 +8,7 @@ function App() {
   let [symbol, setSymbol] = useState("Stock Symbol")
   
   // @params: systemDate, current Date object
-  // @returns: dateFragment, string representation of date YYYY-MM-DD
+  // @returns: date, string representation of date YYYY-MM-DD
   function formatDate(systemDate) {
     let year = systemDate.getFullYear()
     let month = systemDate.getMonth() + 1
@@ -19,18 +19,18 @@ function App() {
     if ( day < 10 ) { day = '0' + day } // add a 0
     // corrected format: 2021-01-07           
      
-    let dateFragment = year + '-' + month + '-' + day // YYYY-MM-DD
+    let date = year + '-' + month + '-' + day // YYYY-MM-DD
     
-    return dateFragment
+    return date
   }
 
   // @params: symbol, string, formatted endpoint
-  // @params: dateFragment, string, 
+  // @params: date, string, 
   //          numerical representation of yesterday (YYYY-MM-DD)
   // @params: apiKey, string, Polygon.io API key 
   // @returns: endpoint (API url) as string 
-  function buildEndpoint(symbol, dateFragment, apiKey) {
-    return  `https://api.polygon.io/v1/open-close/${symbol}/${dateFragment}?apiKey=${apiKey}`
+  function buildEndpoint(symbol, date, apiKey) {
+    return  `https://api.polygon.io/v1/open-close/${symbol}/${date}?apiKey=${apiKey}`
   }
  
   function handleChange(e) {
@@ -43,8 +43,8 @@ function App() {
 
     // create API endpoint based on date and user input
     let systemDate = new Date()  
-    let dateFragment = formatDate(systemDate)
-    let endPoint = buildEndpoint(symbol, dateFragment, apiKey)
+    let date = formatDate(systemDate)
+    let endPoint = buildEndpoint(symbol, date, apiKey)
 
     // fetch stock data based on user given stock symbol
     // and system supplied date of yesterday
@@ -54,7 +54,7 @@ function App() {
 
       let dailyOpenClose = (
         <p id="response">
-          {symbol} stock opened at ${data.open} and closed at ${data.close} on {dateFragment}
+          {symbol} stock opened at ${data.open} and closed at ${data.close} on {date}
         </p>
       )
       ReactDOM.render(

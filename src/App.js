@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 
 function App() {
 
-  const apiKey='YOUR API KEY HERE'
+  const apiKey='YOUR_POLYGON_API_KEY'
   let [symbol, setSymbol] = useState("Stock Symbol")
   
   // @params: systemDate, current Date object
@@ -68,7 +68,7 @@ function App() {
 
   // build user input
   let UI = (
-    <>
+    <div>
       <input 
         placeholder={symbol} 
         onBlur={handleChange}>
@@ -77,8 +77,7 @@ function App() {
         onClick={handleClick}>
           Search Open/Close
       </button>
-      
-    </> // end UI
+    </div> // end UI
   )
   
   return UI
